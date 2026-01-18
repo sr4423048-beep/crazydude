@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HACKER TERMINAL</title>
+    <style>
+        /* CSS Styles */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #000;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            overflow: hidden;
+            height: 100vh;
+        }
+        canvas { position: fixed; top: 0; left: 0; z-index: 1; }
+        .terminal {
+            position: fixed;
+            top: 50%; left: 50%; transform: translate(-50%, -50%);
+            z-index: 10; width: 90%; max-width: 700px;
+            background: rgba(0,0,0,0.9); padding: 40px;
+            border: 2px solid #00ff00; box-shadow: 0 0 30px #00ff00;
+        }
+        .blink { animation: blink 1s infinite; }
+        @keyframes blink { 50% { opacity: 0; } }
+        input { 
+            background: none; 
+            border: 1px solid #00ff00; 
+            color: #00ff00; 
+            padding: 12px; 
+            width: 100%; 
+            font-size: 20px;
+            font-family: 'Courier New', monospace;
+        }
+        input:focus { outline: none; box-shadow: 0 0 10px #00ff00; }
+        .glitch { animation: glitch 0.3s infinite; }
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="matrix"></canvas>
+    <div id="terminal" class="terminal">
+        <div id="output"></div>
+        <div class="blink">_</div>
+        <input type="password" id="password" placeholder="ENTER ACCESS CODE" maxlength="12" autocomplete="off">
+    </div>
+    
+    <script>
+        // Matrix Rain Background
+        const canvas = document.getElementById('matrix');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const chars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
+        const fontSize = 14;
+        const columns = canvas.width / fontSize;
+        const drops = Array(Math.floor(columns)).fill(1);
+
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#00ff00';
+            ctx.font = ${fontSize}px monospace;
+            for (let i = 0; i < drops.length; i++) {
+                const text = chars[Math.floor(Math.random() * chars.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                drops[i]++;
+            }
+        }
+        setInterval(drawMatrix, 50);
+
+        // Terminal Logic
+        const output = document.getElementById('output');
+        const password = document.getElementById('password');
+        const terminal = document.getElementById('terminal');
+
+        let commandIndex = 0;
+        const commands = [
+            '$ sudo hacking_initiated',
+            '> Scanning network interfaces...',
+            '> Firewall bypass successful',
+            '> Root access detected',
+            '> You are Ready to Connect With Murari',
+            '> Enter access code: '
+        ];
+
+        function typeCommand() {
+            if (commandIndex < commands.length) {
+                output.innerHTML += commands[commandIndex] + '<br>';
+                commandIndex++;
+                setTimeout(typeCommand, 700 + Math.random() * 600);
+            } else {
+                password.focus();
+            }
+        }
+        typeCommand();
+
+password.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                if (password.value === '804420') {
+                    output.innerHTML += '<br><span style="color:#00ff41;">✓ ACCESS GRANTED - Thanks</span><br>';
+                    output.innerHTML += '<span style="color:#ffaa00;">> Initiating GitHub redirect...</span><br>';
+                    output.innerHTML += '<span style="color:#00ffff;">> https://github.com/developer9334-boop</span><br>';
+                    
+                    // Auto redirect to GitHub after 2 seconds
+                    setTimeout(() => {
+                        window.location.href = 'https://github.com/developer9334-boop';
+                    }, 2000);
+                    
+                } else {
+                    output.innerHTML += '<br><span style="color:#ff0000;">✗ ACCESS DENIED. Neural firewall active.</span><br>';
+                    output.innerHTML += '<span style="color:#ff4444;">> Try: 1337h4x0r</span><br>';
+                    password.value = '';
+                    setTimeout(() => password.focus(), 100);
+                }
+            }
+        });
+
+        // Responsive canvas
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        // Prevent context menu
+        document.addEventListener('contextmenu', e => e.preventDefault());
+    </script>
+</body>
+</html>
